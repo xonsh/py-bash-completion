@@ -8,6 +8,7 @@ Usage example
 .. code-block:: python
 
     from bash_completion import bash_completions
+
     def get_completions(line):
         split = line.split()
         if len(split) > 1 and not line.endswith(' '):
@@ -18,7 +19,8 @@ Usage example
             begidx = len(line)
 
         endidx = len(line)
-        return bash_completions(prefix, line, begidx, endidx, {})
+        return bash_completions(prefix, line, begidx, endidx)
+
     In [1]: get_completions('git s')
     Out[1]:
     ({'shortlog',
