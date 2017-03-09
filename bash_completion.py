@@ -304,8 +304,10 @@ def bash_completions(prefix, line, begidx, endidx, env=None, paths=None,
         out = subprocess.check_output(
             [command, '-c', script], universal_newlines=True,
             stderr=subprocess.PIPE, env=env)
+        if not out:
+            raise ValueError
     except (subprocess.CalledProcessError, FileNotFoundError,
-            UnicodeDecodeError):
+            UnicodeDecodeError, ValueError):
         return set(), 0
 
     out = out.splitlines()
