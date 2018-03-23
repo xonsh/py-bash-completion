@@ -239,7 +239,7 @@ COMP_COUNT={end}
 COMP_CWORD={n}
 $_func {cmd} {prefix} {prev}
 
-for ((i=0;i<${{#COMPREPLY[*]}};i++)) do echo ${{COMPREPLY[i]}}; done
+for ((i=0;i<${{#COMPREPLY[*]}};i++)) do echo "${{COMPREPLY[i]}}"; done
 """
 
 
