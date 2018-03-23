@@ -256,7 +256,7 @@ def bash_completions(prefix, line, begidx, endidx, env=None, paths=None,
     endidx : int
         The index in line that prefix ends on.
     env : Mapping, optional
-        The environment dict to execute the Bash suprocess in.
+        The environment dict to execute the Bash subprocess in.
     paths : list or tuple of str or None, optional
         This is a list (or tuple) of strings that specifies where the
         ``bash_completion`` script may be found. The first valid path will
@@ -274,8 +274,8 @@ def bash_completions(prefix, line, begidx, endidx, env=None, paths=None,
 
     Returns
     -------
-    rtn : list of str
-        Possible completions of prefix, sorted alphabetically.
+    rtn : set of str
+        Possible completions of prefix
     lprefix : int
         Length of the prefix to be replaced in the completion.
     """
@@ -340,3 +340,60 @@ def bash_completions(prefix, line, begidx, endidx, env=None, paths=None,
         out = set([x.rstrip() for x in out])
 
     return out, len(prefix) - strip_len
+
+
+def complete_line(line, return_line=True, **kwargs):
+    """Provides the completion from the end of the line.
+
+    Parameters
+    ----------
+    line : str
+        Line to complete
+    return_line : bool, optional
+        If true (default), will return the entire line, with the completion added.
+        If false, this will instead return the strings to append to the original line.
+    kwargs : optional
+        All other keyword arguments are passed to the bash_completions() function.
+
+    Returns
+    -------
+    rtn : set of str
+        Possible completions of prefix
+    """
+    # set up for completing from the end of the line
+    split = line.split()
+    if len(split) > 1 and not line.endswith(' '):
+        prefix = split[-1]
+        begidx = len(line.rsplit(prefix)[0])
+    else:
+        prefix = ''
+        begidx = len(line)
+    endidx = len(line)
+    # get completions
+    out, lprefix = bash_completions(prefix, line, begidx, endidx, **kwargs)
+    # reformat output
+    if return_line:
+        preline = line[:-lprefix]
+        rtn = {preline + o for o in out}
+    else:
+        rtn = {o[lprefix:] for o in out}
+    return rtn
+
+
+def main(args=None):
+    """Runs complete_line() and prints the output."""
+    from argparse import ArgumentParser
+    p = ArgumentParser('bash_completions')
+    p.add_argument('--return-line', action='store_true', dest='return_line', default=True,
+                   help='will return the entire line, with the completion added')
+    p.add_argument('--no-return-line', action='store_false', dest='return_line',
+                   help='will instead return the strings to append to the original line')
+    p.add_argument('line', help='line to complete')
+    ns = p.parse_args(args=args)
+    out = complete_line(ns.line, return_line=ns.return_line)
+    for o in out:
+        print(o)
+
+
+if __name__ == '__main__':
+    main()
