@@ -53,3 +53,15 @@ interface, for those who need it!
     'submodule',
     'subtree'},
     1)
+
+
+You may also use this as a simple command line utility:
+
+.. code-block:: sh
+
+    $ python -m bash_completion "ls --s"
+    ls --show-control-chars
+    ls --si
+    ls --size
+    ls --sort
+    ls --sort=

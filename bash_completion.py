@@ -2,6 +2,8 @@
 from bash.
 """
 # developer note: this file should not perform any action on import.
+#                 This file comes from https://github.com/xonsh/py-bash-completion
+#                 and should be edited there!
 import os
 import re
 import sys
@@ -391,7 +393,7 @@ def _bc_main(args=None):
     p.add_argument('line', help='line to complete')
     ns = p.parse_args(args=args)
     out = bash_complete_line(ns.line, return_line=ns.return_line)
-    for o in out:
+    for o in sorted(out):
         print(o)
 
 
