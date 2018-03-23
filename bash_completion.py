@@ -342,7 +342,7 @@ def bash_completions(prefix, line, begidx, endidx, env=None, paths=None,
     return out, len(prefix) - strip_len
 
 
-def complete_line(line, return_line=True, **kwargs):
+def bash_complete_line(line, return_line=True, **kwargs):
     """Provides the completion from the end of the line.
 
     Parameters
@@ -380,7 +380,7 @@ def complete_line(line, return_line=True, **kwargs):
     return rtn
 
 
-def main(args=None):
+def _bc_main(args=None):
     """Runs complete_line() and prints the output."""
     from argparse import ArgumentParser
     p = ArgumentParser('bash_completions')
@@ -390,10 +390,10 @@ def main(args=None):
                    help='will instead return the strings to append to the original line')
     p.add_argument('line', help='line to complete')
     ns = p.parse_args(args=args)
-    out = complete_line(ns.line, return_line=ns.return_line)
+    out = bash_complete_line(ns.line, return_line=ns.return_line)
     for o in out:
         print(o)
 
 
 if __name__ == '__main__':
-    main()
+    _bc_main()
