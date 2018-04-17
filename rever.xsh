@@ -7,7 +7,7 @@ $ACTIVITIES = ['version_bump', 'changelog',
 
 $VERSION_BUMP_PATTERNS = [
     ('bash_completion.py', '__version__\s*=.*', "__version__ = '$VERSION'"),
-    ('setup.py', 'VERSION\s*=.*,', "VERSION = '$VERSION'")
+    ('setup.py', 'VERSION\s*=.*', "VERSION = '$VERSION'")
     ]
 $CHANGELOG_FILENAME = 'CHANGELOG.rst'
 $CHANGELOG_TEMPLATE = 'TEMPLATE.rst'
