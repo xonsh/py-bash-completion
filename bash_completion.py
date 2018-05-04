@@ -350,7 +350,7 @@ def bash_completions(prefix, line, begidx, endidx, env=None, paths=None,
 
     if '-o noquote' not in complete_stmt:
         out, need_quotes = quote_paths(out, '', '')
-        strip_len += int(need_qoutes)
+        strip_len += int(need_quotes)
     if '-o nospace' in complete_stmt:
         out = set([x.rstrip() for x in out])
 
