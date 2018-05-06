@@ -4,6 +4,16 @@ py-bash-completion Change Log
 
 .. current developments
 
+v0.2.2
+====================
+
+**Fixed:**
+
+* Fixed issue with completing quotes and spaces.
+
+
+
+
 v0.2.1
 ====================
 
