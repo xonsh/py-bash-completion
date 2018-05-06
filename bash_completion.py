@@ -284,7 +284,8 @@ def bash_completions(prefix, line, begidx, endidx, env=None, paths=None,
     quote_paths : callable, optional
         A functions that quotes file system paths. You shouldn't normally need
         this as the default is acceptable 99+% of the time. This function should
-        a set of the new paths and a boolean for whether the paths were quoted.
+        return a set of the new paths and a boolean for whether the paths were
+        quoted.
 
     Returns
     -------
