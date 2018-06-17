@@ -355,7 +355,7 @@ def bash_completions(prefix, line, begidx, endidx, env=None, paths=None,
     if '-o nospace' in complete_stmt:
         out = set([x.rstrip() for x in out])
 
-    return out, len(prefix) - strip_len
+    return out, max(len(prefix) - strip_len, 0)
 
 
 def bash_complete_line(line, return_line=True, **kwargs):
