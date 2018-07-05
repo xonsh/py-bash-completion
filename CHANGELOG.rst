@@ -4,6 +4,20 @@ py-bash-completion Change Log
 
 .. current developments
 
+v0.2.3
+====================
+
+**Fixed:**
+
+* Fixed issue with incorrect strip lengths for prefixes with quotes in them
+* Fixed bash script to also consider leading double quotes and not just single
+  quotes
+* `bash_completion` will not return negative prefix lengths for files that need
+  to be string-escaped (files/folders with spaces in name)
+
+
+
+
 v0.2.2
 ====================
 
