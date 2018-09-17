@@ -4,6 +4,17 @@ py-bash-completion Change Log
 
 .. current developments
 
+v0.2.4
+====================
+
+**Fixed:**
+
+* If there are no files to source, a ``set()`` will no longer be inserted
+  into the completion script.
+
+
+
+
 v0.2.3
 ====================
 
