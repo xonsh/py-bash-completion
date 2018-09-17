@@ -294,7 +294,7 @@ def bash_completions(prefix, line, begidx, endidx, env=None, paths=None,
     lprefix : int
         Length of the prefix to be replaced in the completion.
     """
-    source = _get_bash_completions_source(paths) or set()
+    source = _get_bash_completions_source(paths) or ''
 
     if prefix.startswith('$'):  # do not complete env variables
         return set(), 0
