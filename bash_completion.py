@@ -345,7 +345,7 @@ def bash_completions(prefix, line, begidx, endidx, env=None, paths=None,
     commprefix = os.path.commonprefix(list(out))
     strip_len = 0
     strip_prefix = prefix.strip("\"'")
-    while strip_len < len(strip_prefix):
+    while strip_len < len(strip_prefix) and strip_len < len(commprefix):
         if commprefix[strip_len] == strip_prefix[strip_len]:
             break
         strip_len += 1
