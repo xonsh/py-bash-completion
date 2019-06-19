@@ -240,6 +240,7 @@ then
     _complete_stmt=$(_get_complete_statement)
 fi
 
+# Is -C (subshell) or -F (function) completion used?
 if [[ $_complete_stmt =~ "-C" ]] ; then
     _func=$(eval getarg "-C" $_complete_stmt)
 else
