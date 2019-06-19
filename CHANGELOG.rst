@@ -4,6 +4,16 @@ py-bash-completion Change Log
 
 .. current developments
 
+v0.2.6
+====================
+
+**Fixed:**
+
+* Fix completion which uses a subshell environment
+* Fix for string index error in stripped prefix
+
+
+
 v0.2.5
 ====================
 
