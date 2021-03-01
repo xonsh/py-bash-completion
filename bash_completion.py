@@ -318,6 +318,7 @@ def bash_completions(prefix, line, begidx, endidx, env=None, paths=None,
 
     splt = line.split()
     cmd = splt[0]
+    cmd = os.path.basename(cmd)
     idx = n = 0
     prev = ''
     for n, tok in enumerate(splt):
