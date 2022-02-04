@@ -4,6 +4,11 @@ py-bash-completion Change Log
 
 .. current developments
 
+v0.2.8
+====================
+
+
+
 v0.2.7
 ====================
 
