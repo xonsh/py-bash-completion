@@ -371,7 +371,7 @@ def bash_completions(
             stderr=subprocess.PIPE,
             env=env,
         )
-        out = [line for l in out.splitlines() if l.strip()]
+        out = [line for line in out.splitlines() if line.strip()]
         if not out:
             raise ValueError
     except (
