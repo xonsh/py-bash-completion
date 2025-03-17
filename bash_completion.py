@@ -15,7 +15,7 @@ import functools
 import subprocess
 import typing as tp
 
-__version__ = "0.2.7"
+__version__ = '0.2.8'
 
 
 @functools.lru_cache(1)
