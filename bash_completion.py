@@ -105,7 +105,7 @@ _BASH_COMPLETIONS_PATHS_DEFAULT: tp.Tuple[str, ...] = ()
 def _get_bash_completions_source(paths=None):
     global _BASH_COMPLETIONS_PATHS_DEFAULT
     if paths is None:
-        if _BASH_COMPLETIONS_PATHS_DEFAULT is None:
+        if not _BASH_COMPLETIONS_PATHS_DEFAULT:
             _BASH_COMPLETIONS_PATHS_DEFAULT = _bash_completion_paths_default()
         paths = _BASH_COMPLETIONS_PATHS_DEFAULT
     for path in map(pathlib.Path, paths):
