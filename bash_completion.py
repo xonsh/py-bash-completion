@@ -1,9 +1,29 @@
 """This module provides the implementation for the retrieving completion results
 from bash.
 """
-# developer note: this file should not perform any action on import.
-#                 This file comes from https://github.com/xonsh/py-bash-completion
-#                 and should be edited there!
+
+#
+#  ______    _ _ _   _               _                             _                            
+# |  ____|  | (_) | (_)             (_)                           | |                           
+# | |__   __| |_| |_ _ _ __   __ _   _ _ __   __  _____  _ __  ___| |__    _ __ ___ _ __   ___  
+# |  __| / _` | | __| | '_ \ / _` | | | '_ \  \ \/ / _ \| '_ \/ __| '_ \  | '__/ _ \ '_ \ / _ \ 
+# | |___| (_| | | |_| | | | | (_| | | | | | |  >  < (_) | | | \__ \ | | | | | |  __/ |_) | (_) |
+# |______\__,_|_|\__|_|_| |_|\__, | |_|_| |_| /_/\_\___/|_| |_|___/_| |_| |_|  \___| .__/ \___/ 
+#                             __/ |                                                | |          
+#  _         _   _  ____ ____|___/       _ _                       _    _          |_|          
+# (_)       | \ | |/ __ \__   __|       | | |                     | |  | |                      
+#  _ ___    |  \| | |  | | | |      __ _| | | _____      _____  __| |  | |                      
+# | / __|   | . ` | |  | | | |     / _` | | |/ _ \ \ /\ / / _ \/ _` |  | |                      
+# | \__ \   | |\  | |__| | | |    | (_| | | | (_) \ V  V /  __/ (_| |  |_|                      
+# |_|___/   |_| \_|\____/  |_|     \__,_|_|_|\___/ \_/\_/ \___|\__,_|  (_)                      
+#
+#  Note! 
+#  1. This file is being developed in repository https://github.com/xonsh/py-bash-completion and should be edited there!
+#  2. This file should not perform any action on import.
+#  3. Refactoring issue - https://github.com/xonsh/xonsh/issues/5810
+#                                                                                               
+                                                                                               
+
 import os
 import re
 import sys
