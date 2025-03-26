@@ -1,9 +1,29 @@
 """This module provides the implementation for the retrieving completion results
 from bash.
 """
-# developer note: this file should not perform any action on import.
-#                 This file comes from https://github.com/xonsh/py-bash-completion
-#                 and should be edited there!
+
+#
+#  ______    _ _ _   _               _                             _                            
+# |  ____|  | (_) | (_)             (_)                           | |                           
+# | |__   __| |_| |_ _ _ __   __ _   _ _ __   __  _____  _ __  ___| |__    _ __ ___ _ __   ___  
+# |  __| / _` | | __| | '_ \ / _` | | | '_ \  \ \/ / _ \| '_ \/ __| '_ \  | '__/ _ \ '_ \ / _ \ 
+# | |___| (_| | | |_| | | | | (_| | | | | | |  >  < (_) | | | \__ \ | | | | | |  __/ |_) | (_) |
+# |______\__,_|_|\__|_|_| |_|\__, | |_|_| |_| /_/\_\___/|_| |_|___/_| |_| |_|  \___| .__/ \___/ 
+#                             __/ |                                                | |          
+#  _         _   _  ____ ____|___/       _ _                       _    _          |_|          
+# (_)       | \ | |/ __ \__   __|       | | |                     | |  | |                      
+#  _ ___    |  \| | |  | | | |      __ _| | | _____      _____  __| |  | |                      
+# | / __|   | . ` | |  | | | |     / _` | | |/ _ \ \ /\ / / _ \/ _` |  | |                      
+# | \__ \   | |\  | |__| | | |    | (_| | | | (_) \ V  V /  __/ (_| |  |_|                      
+# |_|___/   |_| \_|\____/  |_|     \__,_|_|_|\___/ \_/\_/ \___|\__,_|  (_)                      
+#
+#  Note! 
+#  1. This file is being developed in repository https://github.com/xonsh/py-bash-completion and should be edited there!
+#  2. This file should not perform any action on import.
+#  3. Refactoring issue - https://github.com/xonsh/xonsh/issues/5810
+#                                                                                               
+                                                                                               
+
 import os
 import re
 import sys
@@ -42,7 +62,7 @@ def _windows_bash_command(env=None):
             out = subprocess.check_output(
                 [bash_on_path, "--version"],
                 stderr=subprocess.PIPE,
-                universal_newlines=True,
+                text=True,
             )
         except subprocess.CalledProcessError:
             bash_works = False
@@ -99,18 +119,18 @@ def _bash_completion_paths_default():
     return bcd
 
 
-_BASH_COMPLETIONS_PATHS_DEFAULT: tp.Tuple[str, ...] = ()
+_BASH_COMPLETIONS_PATHS_DEFAULT: tuple[str, ...] = ()
 
 
 def _get_bash_completions_source(paths=None):
     global _BASH_COMPLETIONS_PATHS_DEFAULT
     if paths is None:
-        if not _BASH_COMPLETIONS_PATHS_DEFAULT:
+        if _BASH_COMPLETIONS_PATHS_DEFAULT is None:
             _BASH_COMPLETIONS_PATHS_DEFAULT = _bash_completion_paths_default()
         paths = _BASH_COMPLETIONS_PATHS_DEFAULT
     for path in map(pathlib.Path, paths):
         if path.is_file():
-            return 'source "{}"'.format(path.as_posix())
+            return f'source "{path.as_posix()}"'
     return None
 
 
@@ -185,12 +205,12 @@ def _bash_quote_paths(paths, start, end):
             start = end = _bash_quote_to_use(s)
         if os.path.isdir(_bash_expand_path(s)):
             _tail = slash
-        elif end == "":
+        elif end == "" and not s.endswith("="):
             _tail = space
         else:
             _tail = ""
         if start != "" and "r" not in start and backslash in s:
-            start = "r%s" % start
+            start = f"r{start}"
         s = s + _tail
         if end != "":
             if "r" not in start.lower():
@@ -198,7 +218,7 @@ def _bash_quote_paths(paths, start, end):
             if s.endswith(backslash) and not s.endswith(double_backslash):
                 s += backslash
         if end in s:
-            s = s.replace(end, "".join("\\%s" % i for i in end))
+            s = s.replace(end, "".join(f"\\{i}" for i in end))
         out.add(start + s + end)
     return out, need_quotes
 
@@ -383,7 +403,7 @@ def bash_completions(
     try:
         out = subprocess.check_output(
             [command, "-c", script],
-            universal_newlines=True,
+            text=True,
             stderr=subprocess.PIPE,
             env=env,
         )
@@ -406,6 +426,12 @@ def bash_completions(
 
     # Ensure input to `commonprefix` is a list (now required by Python 3.6)
     commprefix = os.path.commonprefix(list(out))
+
+    if prefix.startswith("~") and commprefix and prefix not in commprefix:
+        home_ = os.path.expanduser("~")
+        out = {f"~/{os.path.relpath(p, home_)}" for p in out}
+        commprefix = f"~/{os.path.relpath(commprefix, home_)}"
+    
     strip_len = 0
     strip_prefix = prefix.strip("\"'")
     while strip_len < len(strip_prefix) and strip_len < len(commprefix):
@@ -416,8 +442,18 @@ def bash_completions(
     if "-o noquote" not in complete_stmt:
         out, need_quotes = quote_paths(out, opening_quote, closing_quote)
     if "-o nospace" in complete_stmt:
-        out = set([x.rstrip() for x in out])
+        out = {x.rstrip() for x in out}
 
+    # For arguments like 'status=progress', the completion script only returns
+    # the part after '=' in the completion results. This causes the strip_len
+    # to be incorrectly calculated, so it needs to be fixed here
+    if "=" in prefix and "=" not in commprefix:
+        strip_len = prefix.index("=") + 1
+    # Fix case where remote git branch is being deleted
+    # (e.g. 'git push origin :dev-branch')
+    elif ":" in prefix and ":" not in commprefix:
+        strip_len = prefix.index(":") + 1
+    
     return out, max(len(prefix) - strip_len, 0)
 
 
